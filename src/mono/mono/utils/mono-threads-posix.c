@@ -32,7 +32,7 @@
 
 #include <errno.h>
 
-#if defined(_POSIX_VERSION) && !defined (HOST_WASM)
+#if defined(_POSIX_VERSION) && !defined (HOST_BROWSER) && !defined (HOST_WASI)
 
 #include <pthread.h>
 

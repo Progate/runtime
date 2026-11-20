@@ -1,4 +1,4 @@
-#ifndef HOST_WASI
+#ifdef HOST_BROWSER
 #include <glib.h>
 #include <mono/mini/mini.h>
 #include <mono/mini/mini-runtime.h>

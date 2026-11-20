@@ -15,7 +15,7 @@
 #include <unistd.h>
 #endif
 
-#if defined(_POSIX_VERSION) && !defined (HOST_WASM)
+#if defined(_POSIX_VERSION) && !defined (HOST_BROWSER) && !defined (HOST_WASI)
 
 #include "mono/utils/mono-dl.h"
 #include "mono/utils/mono-embed.h"

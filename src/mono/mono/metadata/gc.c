@@ -686,7 +686,7 @@ ves_icall_System_GCHandle_InternalSet (MonoGCHandle handle, MonoObjectHandle obj
 static MonoCoopSem finalizer_sem;
 static volatile gboolean finished;
 
-#ifdef HOST_WASM
+#ifdef HOST_BROWSER
 
 static void
 mono_wasm_gc_finalize_notify (void)
@@ -699,7 +699,7 @@ mono_wasm_gc_finalize_notify (void)
 #endif
 }
 
-#endif /* HOST_WASM */
+#endif /* HOST_BROWSER */
 
 /*
  * mono_gc_finalize_notify:
@@ -720,7 +720,7 @@ mono_gc_finalize_notify (void)
 
 #if defined(HOST_WASI)
 	// TODO: Schedule the background job on WASI. Threads aren't yet supported in this build.
-#elif defined(HOST_WASM)
+#elif defined(HOST_BROWSER)
 	mono_wasm_gc_finalize_notify ();
 #else
 	mono_coop_sem_post (&finalizer_sem);

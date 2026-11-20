@@ -146,12 +146,6 @@ mono_arch_get_patch_offset (guint8 *code)
 	g_error ("mono_arch_get_patch_offset");
 	return 0;
 }
-gpointer
-mono_arch_ip_from_context (void *sigctx)
-{
-	g_error ("mono_arch_ip_from_context");
-}
-
 gboolean
 mono_arch_is_inst_imm (int opcode, int imm_opcode, gint64 imm)
 {
@@ -392,6 +386,16 @@ mono_arch_tailcall_supported (MonoCompile *cfg, MonoMethodSignature *caller_sig,
 }
 
 #endif // DISABLE_JIT
+
+/*
+ * wasm の関数の中の位置はシグナルの文脈に載らない。シグナルを受ける Linux（BrowserOS）では、ハンドラーが管理コードの
+ * 位置を探しに来るので、分からないと答える
+ */
+gpointer
+mono_arch_ip_from_context (void *sigctx)
+{
+	return NULL;
+}
 
 const char*
 mono_arch_fregname (int reg)

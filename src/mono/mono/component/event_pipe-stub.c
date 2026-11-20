@@ -567,7 +567,7 @@ mono_component_event_pipe_init (void)
 	return component_event_pipe_stub_init ();
 }
 
-#if defined(HOST_WASM) && !defined(HOST_WASI)
+#if defined(HOST_BROWSER)
 
 EMSCRIPTEN_KEEPALIVE gboolean
 mono_wasm_event_pipe_enable (const ep_char8_t *output_path,

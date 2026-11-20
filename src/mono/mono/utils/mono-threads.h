@@ -128,7 +128,7 @@ and reduce the number of casts drastically.
 /* If this is defined, use the signals backed on Mach. Debug only as signals can't be made usable on OSX. */
 // #define USE_SIGNALS_ON_MACH
 
-#ifdef HOST_WASM
+#if defined(HOST_BROWSER) || defined(HOST_WASI)
 #define USE_WASM_BACKEND
 #elif defined (_POSIX_VERSION)
 #if defined (__MACH__) && !defined (USE_SIGNALS_ON_MACH)
@@ -844,7 +844,7 @@ void mono_threads_join_lock (void);
 void mono_threads_join_unlock (void);
 
 
-#ifdef HOST_WASM
+#if defined(HOST_BROWSER) || defined(HOST_WASI)
 typedef void (*background_job_cb)(void);
 void mono_main_thread_schedule_background_job (background_job_cb cb);
 void mono_current_thread_schedule_background_job (background_job_cb cb);

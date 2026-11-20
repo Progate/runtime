@@ -1,7 +1,7 @@
 
 #include <config.h>
 
-#ifdef HOST_WASM
+#if defined(HOST_BROWSER) || defined(HOST_WASI)
 
 #include <sys/types.h>
 #if HAVE_SYS_STAT_H

@@ -146,6 +146,10 @@ if (CLR_CMAKE_TARGET_UNIX OR CLR_CMAKE_TARGET_BROWSER OR CLR_CMAKE_TARGET_WASI)
 
     if (CLR_CMAKE_TARGET_BROWSER OR CLR_CMAKE_TARGET_WASI)
         # skip for now
+    elseif (CLR_CMAKE_TARGET_LINUX AND CLR_CMAKE_TARGET_ARCH_WASM)
+        # BrowserOS（wasm32-browseros-linux-musl）: 世界に GSSAPI は無いので System.Net.Security.Native は組まない。
+        # 暗号は Linux の配布物と同じく、実行時に libssl.so.3 を dlopen する形（FEATURE_DISTRO_AGNOSTIC_SSL）で組む
+        add_subdirectory(System.Security.Cryptography.Native)
     elseif (CLR_CMAKE_TARGET_MACCATALYST)
         add_subdirectory(System.Net.Security.Native)
         # System.Security.Cryptography.Native is intentionally disabled on iOS

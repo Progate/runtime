@@ -878,7 +878,8 @@ else()
   set(NAME_DEV_RANDOM "\"/dev/random\"")
 endif()
 
-if(HOST_LINUX AND HAVE_SYS_MMAN_H AND HAVE_ELF_H AND HAVE_SYS_SYSCALL_H)
+# JIT の無い wasm（BrowserOS）には perf の jitdump に書くコードが無い
+if(HOST_LINUX AND NOT HOST_WASM AND HAVE_SYS_MMAN_H AND HAVE_ELF_H AND HAVE_SYS_SYSCALL_H)
   set(ENABLE_JIT_DUMP 1)
 endif()
 

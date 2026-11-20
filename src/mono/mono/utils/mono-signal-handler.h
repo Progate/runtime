@@ -89,7 +89,7 @@ typedef struct {
 	EXCEPTION_POINTERS* ep;
 } MonoWindowsSigHandlerInfo;
 /* seh_vectored_exception_handler () passes in a CONTEXT* */
-#elif defined(HOST_WASM)
+#elif defined(HOST_BROWSER) || defined(HOST_WASI)
 #define MONO_SIG_HANDLER_INFO_TYPE int
 #else
 /* sigaction */

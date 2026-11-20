@@ -2,7 +2,7 @@
 #include <mono/utils/mono-compiler.h>
 #include <mono/eglib/glib.h>
 
-#if defined (HOST_WASM)
+#if defined (HOST_BROWSER) || defined (HOST_WASI)
 
 #include "mono/utils/mono-dl.h"
 #include "mono/utils/mono-embed.h"

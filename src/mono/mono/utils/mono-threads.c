@@ -517,11 +517,11 @@ register_thread (MonoThreadInfo *info)
 	g_assert (staddr);
 #endif /* TARGET_WASM */
 
-#ifdef HOST_WASM
+#ifdef HOST_BROWSER
 #ifndef DISABLE_THREADS
 	mono_native_tls_set_value (jobs_key, NULL);
 #endif /* DISABLE_THREADS */
-#endif /* HOST_WASM */
+#endif /* HOST_BROWSER */
 
 	g_assert (stsize);
 	info->stack_start_limit = staddr;
@@ -973,7 +973,7 @@ mono_thread_info_init (size_t info_size)
 
 	mono_threads_suspend_policy_init ();
 
-#ifdef HOST_WASM
+#ifdef HOST_BROWSER
 #ifndef DISABLE_THREADS
 	res = mono_native_tls_alloc (&jobs_key, NULL);
 #endif /* DISABLE_THREADS */

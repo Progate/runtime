@@ -129,7 +129,7 @@ mono_mem_account_register_counters (void)
 // Windows specific implementation in mono-mmap-windows.c
 #define HAVE_VALLOC_ALIGNED
 
-#elif defined(HOST_WASM)
+#elif defined(HOST_BROWSER) || defined(HOST_WASI)
 // WebAssembly implementation in mono-mmap-wasm.c
 #define HAVE_VALLOC_ALIGNED
 
@@ -261,7 +261,7 @@ mono_valloc (void *addr, size_t length, int flags, MonoMemAccountType type)
 		mflags |= MAP_32BIT;
 #endif
 
-#ifdef HOST_WASM
+#ifdef HOST_BROWSER
 	if (length == 0)
 		/* emscripten throws an exception on 0 length */
 		return NULL;
@@ -373,10 +373,10 @@ mono_file_map_error (size_t length, int flags, int fd, guint64 offset, void **re
 		mflags |= MAP_32BIT;
 #endif
 
-#ifdef HOST_WASM
+#ifdef HOST_BROWSER
 	if (length == 0)
 		/* emscripten throws an exception on 0 length */
-		*error_message = g_stdrup_printf ("%s failed file:%s length:0x%" G_GSIZE_FORMAT "x offset:0x%" PRIu64 "X error:%s\n",
+		*error_message = g_strdup_printf ("%s failed file:%s length:0x%" G_GSIZE_FORMAT "x offset:0x%" PRIu64 "X error:%s\n",
 			__func__, filepath ? filepath : "", length, (guint64)offset, "mmaps of zero length are not permitted with emscripten");
 		return NULL;
 #endif
