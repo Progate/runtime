@@ -220,6 +220,11 @@ elseif(CLR_CMAKE_HOST_OS STREQUAL "linux")
   add_definitions(-D_GNU_SOURCE -D_REENTRANT)
   add_definitions(-D_THREAD_SAFE)
   set(HAVE_CGROUP_SUPPORT 1)
+  if(CMAKE_SYSTEM_PROCESSOR STREQUAL "wasm32")
+    # BrowserOS: __thread は __tls_base からの足し算で読めるが、pthread_getspecific は libc.so への呼び出しになる。
+    # sgen の割り当て（TLAB）や interp の文脈など、ホットな所でスレッドの値を読むので __thread を使う
+    set(MONO_KEYWORD_THREAD "__thread")
+  endif()
   # Enable the "full RELRO" options (RELRO & BIND_NOW) at link time
   add_link_options(-Wl,-z,relro)
   add_link_options(-Wl,-z,now)

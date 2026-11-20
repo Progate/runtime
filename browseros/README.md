@@ -15,7 +15,7 @@ dotnet の msbuild を通さず、Mono と `src/native/libs` の CMake を直に
 | スクリプト | 中身 |
 | --- | --- |
 | `toolchain.cmake` | CMake の道具（`CMAKE_SYSTEM_NAME=Linux`・`CMAKE_SYSTEM_PROCESSOR=wasm32`） |
-| `build-mono.sh` | `libmonosgen-2.0.a`・`libmono-ee-interp.a`・コンポーネントなど |
+| `build-mono.sh` | `libmonosgen-2.0.a`・`libmono-ee-interp.a`・コンポーネントなど（LTO） |
 | `build-native-libs.sh` | `libSystem.Native.a`・`libSystem.IO.Compression.Native.a`・`libSystem.Globalization.Native.a`・`libSystem.Security.Cryptography.Native.OpenSsl.a` |
 | `complete-pinvoke-table.mjs` | .NET 8 の ManagedToNativeGenerator が宣言を書き落とす P/Invoke に宣言を足す |
 | `link-host.sh` | ホスト（`src/mono/browseros/host.c`）を組んでリンクする |
@@ -26,7 +26,8 @@ dotnet の msbuild を通さず、Mono と `src/native/libs` の CMake を直に
 ## 変えたところ
 
 - `eng/native/configureplatform.cmake`・`configurecompiler.cmake`: Linux の `wasm32` を受け付ける（musl）
-- `src/mono/CMakeLists.txt`: wasm では perf の jitdump を組まない（JIT が無い）
+- `src/mono/CMakeLists.txt`: wasm では perf の jitdump を組まない（JIT が無い）。スレッドの値は `__thread` で持つ
+  （`MONO_KEYWORD_THREAD`。`pthread_getspecific` だと sgen の割り当てや interp の文脈を読むたびに libc.so への呼び出しになる）
 - スレッド: `mono-threads.h` の後ろ側の選び方。BrowserOS は POSIX の後ろ側（pthread・`pthread_getattr_np`）
 - finalizer・sgen の背景の仕事: ブラウザーだけが主スレッドの仕事の列で回す。BrowserOS は本物の finalizer スレッド
 - `mono-dl`・`mono-mmap`: BrowserOS は `dlopen(3)`・`mmap(2)`

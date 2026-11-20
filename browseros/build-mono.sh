@@ -12,7 +12,8 @@ out=${1:?output directory}
 mkdir -p "$out"
 # ICU は世界に置かない。Linux と同じく System.Globalization.Native は実行時に libicu を dlopen する（無ければ InvariantGlobalization が要る）。
 # 組むのに要るのは ICU の頭だけで、ICU_INCLUDE で渡す
-cflags="-pthread -D_GNU_SOURCE=1 -fexceptions -I$root/src/native/public -I$root/src/mono/mono/eglib -I$root/src/native/external/zlib -I${ICU_INCLUDE:?ICU headers}"
+# LTO: interp と metadata の間の呼び出しをまたいで最適化する（Roslyn のコンパイルで 1 割ほど速い）
+cflags="-flto -pthread -D_GNU_SOURCE=1 -fexceptions -I$root/src/native/public -I$root/src/mono/mono/eglib -I$root/src/native/external/zlib -I${ICU_INCLUDE:?ICU headers}"
 cmake -G Ninja -S "$root/src/mono" -B "$out" \
   -DCMAKE_TOOLCHAIN_FILE="$here/toolchain.cmake" \
   -DCMAKE_BUILD_TYPE=Release \
