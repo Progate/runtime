@@ -33,6 +33,12 @@ handle_enum:
 	case MONO_TYPE_I:
 	case MONO_TYPE_U:
 	case MONO_TYPE_PTR:
+	/*
+	 * 関数ポインター（`delegate* unmanaged<...>`）も wasm では i32 のアドレスで渡る。ここに無いと 'X' になり、
+	 * SystemNative_SetTerminalInvalidationHandler など関数ポインターを取る P/Invoke を呼んだところで
+	 * mono_wasm_get_interp_to_native_trampoline が CANNOT HANDLE INTERP ICALL SIG で止まる
+	 */
+	case MONO_TYPE_FNPTR:
 	case MONO_TYPE_SZARRAY:
 	case MONO_TYPE_CLASS:
 	case MONO_TYPE_OBJECT:
